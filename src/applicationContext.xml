@@ -6,7 +6,7 @@
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
 
-	<context:component-scan base-package="com.service,com.dao" />
+	<context:component-scan base-package="com.orisonchan.schedule.service,com.orisonchan.schedule.dao" />
 
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="url"
@@ -32,9 +32,9 @@
 		</property>
 		<property name="mappingResources">
 			<list>
-				<value>com/dao/User.hbm.xml</value>
-				<value>com/dao/Classi.hbm.xml</value>
-				<value>com/dao/Schedule.hbm.xml</value>
+				<value>com/orisonchan/schedule/dao/User.hbm.xml</value>
+				<value>com/orisonchan/schedule/dao/Classi.hbm.xml</value>
+				<value>com/orisonchan/schedule/dao/Schedule.hbm.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -47,5 +47,5 @@
 	<tx:annotation-driven />
 
 	<!-- cache -->
-	<bean id="userCache" class="com.cache.UserCache" scope="singleton"/>
+	<bean id="userCache" class="com.orisonchan.schedule.cache.UserCache" scope="singleton"/>
 </beans>
