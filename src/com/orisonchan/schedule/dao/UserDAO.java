@@ -59,7 +59,7 @@ public class UserDAO {
 	public User findById(java.lang.Integer id) {
 		log.debug("getting User instance with id: " + id);
 		try {
-			User instance = (User) getCurrentSession().get("com.bean.User", id);
+			User instance = (User) getCurrentSession().get("com.orisonchan.schedule.bean.User", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -71,7 +71,7 @@ public class UserDAO {
 	public List findByExample(User instance) {
 		log.debug("finding User instance by example");
 		try {
-			List results = getCurrentSession().createCriteria("com.bean.User")
+			List results = getCurrentSession().createCriteria("com.orisonchan.schedule.bean.User")
 					.add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: "
 					+ results.size());

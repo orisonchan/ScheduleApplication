@@ -1,4 +1,4 @@
-<%@ page language="java" import="java.util.*,com.bean.*"
+<%@ page language="java" import="java.util.*,com.orisonchan.schedule.bean.*"
 	pageEncoding="UTF-8"%>
 <%
 	String path = request.getContextPath();
@@ -133,6 +133,9 @@
 							<h2>
 								&nbsp;&nbsp;${user.username}，欢迎回来！<span id="abcdefg"></span>
 							</h2>
+							<c:foreach items="${today_schedules_list}" var="li">   
+								123${li}   
+							</c:foreach>
 							<table class="table table-striped">
 								<thead>
 									<tr>

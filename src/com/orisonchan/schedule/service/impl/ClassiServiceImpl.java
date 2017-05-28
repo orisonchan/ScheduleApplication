@@ -35,6 +35,7 @@ public class ClassiServiceImpl implements ClassiService {
 		return classiDAO.insert(cla);
 	}
 
+	@Override
 	public List<Classi> queryAllByuserId(int id) {
 		List<Classi> list = this.classiDAO.findByProperty("userId", Integer.valueOf(id));
 		List<Classi> listDepth = new ArrayList<Classi>();
@@ -67,5 +68,10 @@ public class ClassiServiceImpl implements ClassiService {
 			}
 		}
 		return newlist;
+	}
+	
+	@Override
+	public Classi queryById(int id){
+		return classiDAO.findById(id);
 	}
 }

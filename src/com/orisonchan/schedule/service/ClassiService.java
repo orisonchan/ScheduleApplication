@@ -13,5 +13,7 @@ public interface ClassiService {
 	public List<Classi> queryAllByuserId(int id);
 
 	public int queryCreateWithinOneWeekClass(Integer id);
+	
+	public Classi queryById(int id);
 
 }

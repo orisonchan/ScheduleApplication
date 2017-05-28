@@ -60,7 +60,7 @@ public class ScheduleDAO {
 	public Schedule findById(java.lang.Integer id) {
 		log.debug("getting Schedule instance with id: " + id);
 		try {
-			Schedule instance = (Schedule) getCurrentSession().get("com.bean.Schedule",
+			Schedule instance = (Schedule) getCurrentSession().get("com.orisonchan.schedule.bean.Schedule",
 					id);
 			return instance;
 		} catch (RuntimeException re) {
@@ -73,7 +73,7 @@ public class ScheduleDAO {
 	public List findByExample(Schedule instance) {
 		log.debug("finding Schedule instance by example");
 		try {
-			List results = getCurrentSession().createCriteria("com.bean.Schedule")
+			List results = getCurrentSession().createCriteria("com.orisonchan.schedule.bean.Schedule")
 					.add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: "
 					+ results.size());
