@@ -19,10 +19,7 @@ public class ScheduleVO {
 	String content;
 	String classiname;
 	
-	@Autowired
-	protected static ClassiService classiService;
-	
-	public static ScheduleVO tranform(Schedule sche){
+	public static ScheduleVO tranform(Schedule sche, ClassiService classiService){
 		ScheduleVO svo = new ScheduleVO();
 		BeanUtils.copyProperties(sche,svo);	
 		svo.setClassiname(classiService.queryById(svo.classiId).getName());

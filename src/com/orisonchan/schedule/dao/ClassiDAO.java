@@ -60,7 +60,7 @@ public class ClassiDAO {
 	public Classi findById(java.lang.Integer id) {
 		log.debug("getting Classi instance with id: " + id);
 		try {
-			Classi instance = (Classi) getCurrentSession().get("com.orisonchan.schedule.dao.Classi", id);
+			Classi instance = (Classi) getCurrentSession().get("com.orisonchan.schedule.bean.Classi", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -72,7 +72,7 @@ public class ClassiDAO {
 	public List findByExample(Classi instance) {
 		log.debug("finding Classi instance by example");
 		try {
-			List results = getCurrentSession().createCriteria("com.orisonchan.schedule.dao.Classi").add(Example.create(instance)).list();
+			List results = getCurrentSession().createCriteria("com.orisonchan.schedule.bean.Classi").add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {

@@ -1,5 +1,6 @@
 <%@ page language="java" import="java.util.*,com.orisonchan.schedule.bean.*"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -133,9 +134,6 @@
 							<h2>
 								&nbsp;&nbsp;${user.username}，欢迎回来！<span id="abcdefg"></span>
 							</h2>
-							<c:foreach items="${today_schedules_list}" var="li">   
-								123${li}   
-							</c:foreach>
 							<table class="table table-striped">
 								<thead>
 									<tr>
@@ -147,28 +145,15 @@
 									</tr>
 								</thead>
 								<tbody>
-									<%
-										List<Schedule> list = (List<Schedule>) request.getAttribute("today_schedules_list");
-																		Iterator<Schedule> it = list.iterator();
-																		while(it.hasNext()){
-																			Schedule sche = (Schedule)it.next();
-																				out.println("<tr>");
-																				out.println("<td class=\"center\">"+sche.getStart_time().toString().substring(0, 16)+"</td>");
-																				out.println("<td class=\"center\">"+sche.getEnd_time().toString().substring(0, 16)+"</td>");
-																				List classlist = (List)request.getAttribute("total_classes");
-																				Iterator ite = classlist.iterator();
-																				while(ite.hasNext()){
-																					Classi clas = (Classi)ite.next();
-																					if(clas.getId()==sche.getClassiId()){
-																						out.println("<td class=\"center\">"+clas.getName()+"</td>");
-																						break;
-																					}															
-																				}
-																				out.println("<td class=\"center\">"+sche.getTitle()+"</td>");
-																				out.println("<td><a href=\"schedule/"+sche.getId()+"/detail.do\"><span class=\"label-default label label-danger delete\">详情</span></a></td>");
-																				out.println("</tr>");
-																		}
-									%>
+								<c:forEach items="${today_schedules_list}" var="scheVO" varStatus="status">
+									<tr>
+										<td class="center">${scheVO.start_time.toString().substring(0, 16)}</td>
+										<td class="center">${scheVO.end_time.toString().substring(0, 16)}</td>
+										<td class="center">${scheVO.classiname}</td>
+										<td class="center">${scheVO.title}</td>
+										<td class="center"><a href="schedule/${scheVO.id}/detail.do"><span class="label-default label label-danger delete">详情</span></a></td>
+									</tr>
+								</c:forEach>
 								</tbody>
 							</table>
 						</div>

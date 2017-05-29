@@ -1,6 +1,7 @@
 package com.orisonchan.schedule.service.impl;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.orisonchan.schedule.bean.Schedule;
 import com.orisonchan.schedule.dao.ScheduleDAO;
+import com.orisonchan.schedule.service.ClassiService;
 import com.orisonchan.schedule.service.ScheduleService;
+import com.orisonchan.schedule.vo.ScheduleVO;
 
 /**
  * @author Orison Chan
@@ -19,7 +22,10 @@ import com.orisonchan.schedule.service.ScheduleService;
 public class ScheduleServiceImpl implements ScheduleService {
 
 	@Autowired
-	public ScheduleDAO scheduleDAO;
+	private ScheduleDAO scheduleDAO;
+	
+	@Autowired
+	private ClassiService classiService;
 
 	@Override
 	public Integer addschedule(Timestamp start_time, Timestamp end_time,
@@ -57,10 +63,19 @@ public class ScheduleServiceImpl implements ScheduleService {
 		return TodaySchedule(userId).size();
 	}
 
-	@SuppressWarnings("rawtypes")
+
+	@SuppressWarnings("unchecked")
 	@Override
-	public List TodaySchedule(int userId) {
-		return scheduleDAO.TodaySchedule(userId);
+	public ArrayList<ScheduleVO> TodaySchedule(int userId) {
+		List<Schedule> list = scheduleDAO.TodaySchedule(userId);
+		ArrayList<ScheduleVO> arraylist = new ArrayList<ScheduleVO>();
+		ScheduleVO svo;
+		for(Schedule sche:list){
+			svo = new ScheduleVO();
+			svo = ScheduleVO.tranform(sche,classiService);
+			arraylist.add(svo);
+		}
+		return arraylist;
 	}
 
 	@SuppressWarnings("rawtypes")
