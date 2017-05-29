@@ -3,7 +3,6 @@ package com.orisonchan.schedule.vo;
 import java.sql.Timestamp;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.orisonchan.schedule.bean.Schedule;
 import com.orisonchan.schedule.service.ClassiService;

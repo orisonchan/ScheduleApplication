@@ -124,12 +124,10 @@ public class UserController {
 			return "redirect:login.do";
 		model.addAttribute("user", userService.getUserInfo(userId));
 		model.addAttribute("total_schedules_count", scheduleService.CountByUserId(userId));
-		//request.setAttribute("today_schedules_list", scheduleService.TodaySchedule(userId));
 		model.addAttribute("today_schedules_count", scheduleService.TodayScheduleCount(userId));
 		model.addAttribute("total_classes_count", classiService.CountByUserId(userId));
 		model.addAttribute("today_schedules_list", scheduleService.TodaySchedule(userId));
 		model.addAttribute("within_oneweek", classiService.queryCreateWithinOneWeekClass(userId));
-		request.setAttribute("total_classes", classiService.queryAllByuserId(userId));
 		return "user/index";
 	}
 
@@ -165,13 +163,13 @@ public class UserController {
 	public Message update(@RequestParam("username") String username, @RequestParam("password") String password,
 			@RequestParam("gender") String gender, @RequestParam("age") int age, HttpSession httpSession) {
 		Message m = new Message();
-		Integer userId = (Integer) httpSession.getAttribute("userid");
-		User user = userService.getUserInfo(userId);
-		user.setUsername(username);
-		user.setPassword(password);
-		user.setGender(gender);
-		user.setAge(age);
 		try {
+			Integer userId = (Integer) httpSession.getAttribute("userid");
+			User user = userService.getUserInfo(userId);
+			user.setUsername(username);
+			user.setPassword(password);
+			user.setGender(gender);
+			user.setAge(age);		
 			userService.update(user);
 			m.setMessage(Message.MESSAGE_SUCCESS);
 		} catch (Exception e) {
@@ -186,8 +184,9 @@ public class UserController {
 	@RequestMapping("/showinfo.do")
 	public String showinfo(Model model, HttpSession httpSession, HttpServletRequest request) {
 		Integer userId = (Integer) httpSession.getAttribute("userid");
+		if (userId == null)
+			return "redirect:login.do";
 		model.addAttribute("user", userService.getUserInfo(userId));
-		request.setAttribute("user", userService.getUserInfo(userId));
 		return "user/user-info";
 	}
 

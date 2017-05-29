@@ -1,5 +1,5 @@
-<%@ page language="java" import="java.util.*,com.bean.User"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
@@ -26,17 +26,6 @@
 <script src="bower_components/jquery/jquery.min.js"></script>
 </head>
 <body>
-	<%
-		//如果未登录，跳转回login
-		if (userid == null) {
-	%>
-	<script>
-		alert("您还未登录！");
-		window.location.href = "login.do";
-	</script>
-	<%
-		}
-	%>
 	<nav class="navbar navbar-default" role="navigation"
 		style="background: url(./img/bg.jpg) 0 0/cover no-repeat;padding-top:0px">
 	<div class="navbar-inner">
@@ -121,14 +110,12 @@
 											class="form-control3 required" id="Field6" autocomplete="off"
 											required="" value="M"
 											style="vertical-align: middle; width: 20%"
-											<%if (((User) request.getAttribute("user")).getGender().equals("M"))
-				out.println("checked=\"checked\"");%>><label>男</label>
+											<c:if test="${user.gender eq 'M'}"> checked</c:if> /><label>男</label>
 										<input id="gender" type="radio" name="gender"
 											class="form-control3 required" id="Field6" autocomplete="off"
 											required="" value="F"
 											style="vertical-align: middle; width: 20%"
-											<%if (((User) request.getAttribute("user")).getGender().equals("F"))
-				out.println("checked=\"checked\"");%> /><label>女</label>
+											<c:if test="${user.gender eq 'F'}"> checked</c:if> /><label>女</label>
 									</div>
 									<br /> <label class="col-md-2 control-label">年龄</label>
 									<div class="input-group col-md-4">
@@ -184,7 +171,7 @@
 				data : {
 					'username' : $('#username').val(),
 					'password' : $('#password').val(),
-					'gender' : $('#gender').val(),
+					'gender' : $('#gender:checked').val(),
 					'age' : $('#age').val()
 				},
 				success : function(data, status) {
