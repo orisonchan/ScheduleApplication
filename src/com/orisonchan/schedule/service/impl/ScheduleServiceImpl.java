@@ -41,10 +41,18 @@ public class ScheduleServiceImpl implements ScheduleService {
 		return 0;
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings("unchecked")
 	@Override
-	public List queryAllByuserId(int id) {
-		return scheduleDAO.findByProperty("userId", id);
+	public ArrayList<ScheduleVO> queryAllByuserId(int id) {
+		List<Schedule> list = scheduleDAO.findByProperty("userId", id);
+		ArrayList<ScheduleVO> arraylist = new ArrayList<ScheduleVO>();
+		ScheduleVO svo;
+		for(Schedule sche:list){
+			svo = new ScheduleVO();
+			svo = ScheduleVO.tranform(sche,classiService);
+			arraylist.add(svo);
+		}
+		return arraylist;
 	}
 
 	@Override
@@ -78,14 +86,23 @@ public class ScheduleServiceImpl implements ScheduleService {
 		return arraylist;
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings("unchecked")
 	@Override
-	public List findByUserIdNClassId(int userId, int classiId) {
-		return scheduleDAO.findByUserIdNClassId(userId, classiId);
+	public ArrayList<ScheduleVO> findByUserIdNClassId(int userId, int classiId) {
+		List<Schedule> list = scheduleDAO.findByUserIdNClassId(userId, classiId);
+		ArrayList<ScheduleVO> arraylist = new ArrayList<ScheduleVO>();
+		ScheduleVO svo;
+		for(Schedule sche:list){
+			svo = new ScheduleVO();
+			svo = ScheduleVO.tranform(sche,classiService);
+			arraylist.add(svo);
+		}
+		return arraylist;
 	}
 
 	@Override
-	public Schedule findById(Integer id) {
-		return scheduleDAO.findById(id);
+	public ScheduleVO findById(Integer id) {
+		ScheduleVO svo = ScheduleVO.tranform(scheduleDAO.findById(id),classiService);
+		return svo;
 	}
 }

@@ -1,12 +1,10 @@
-<%@ page language="java" import="java.util.*,com.bean.*"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	HttpSession s = request.getSession();
-	Integer userid = (Integer) s.getAttribute("userid");
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -28,17 +26,6 @@
 <script src="bower_components/jquery/jquery.min.js"></script>
 </head>
 <body>
-	<%
-		//如果未登录，跳转回login
-		if (userid == null) {
-	%>
-	<script>
-		alert("您还未登录！");
-		window.location.href = "login.jsp";
-	</script>
-	<%
-		}
-	%>
 	<nav class="navbar navbar-default" role="navigation"
 		style="background: url(./img/bg.jpg) 0 0/cover no-repeat;padding-top:0px">
 	<div class="navbar-inner">
@@ -129,18 +116,14 @@
 										class="col-md-2 control-label">分类</label>
 									<div class="input-group col-md-4">
 										<select class="form-control" id="classiId" name="classiId">
-											<%
-												List classilist = (List) request.getAttribute("clazzlist");
-												Iterator itee = classilist.iterator();
-												while (itee.hasNext()) {
-													Classi classi = (Classi) itee.next();
-													String line = "";
-													for (int i = 1; i <= classi.getLevel(); i++)
-														line += "&nbsp;&nbsp;";
-													out.println("<option value=\"" + classi.getId() + "\">" + line
-															+ classi.getName() + "</option>");
-												}
-											%>
+										<c:forEach items="${clazzlist}" var="clazz" varStatus="status">
+											<option value="${clazz.id}">
+											<c:forEach var="i" begin="1" end="${clazz.level}" >
+												&nbsp;
+											</c:forEach>
+												${clazz.name}
+											</option>											
+										</c:forEach>
 										</select>
 									</div>
 									<br /> <label class="col-md-2 control-label">标题</label>

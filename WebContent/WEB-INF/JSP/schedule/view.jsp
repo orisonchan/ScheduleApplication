@@ -1,12 +1,10 @@
-<%@ page language="java" import="java.util.*,com.bean.*"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
 	+ request.getServerName() + ":" + request.getServerPort()
 	+ path + "/";
-	HttpSession s = request.getSession();
-	Integer userid = (Integer) s.getAttribute("userid");
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -27,17 +25,6 @@
 <script src="bower_components/jquery/jquery.min.js"></script>
 </head>
 <body>
-	<%
-		//如果未登录，跳转回login
-			if (userid == null) {
-	%>
-	<script>
-		alert("您还未登录！");
-		window.location.href = "login.jsp";
-	</script>
-	<%
-		}
-	%>
 	<nav class="navbar navbar-default" role="navigation"
 		style="background: url(./img/bg.jpg) 0 0/cover no-repeat;padding-top:0px">
 	<div class="navbar-inner">
@@ -105,21 +92,9 @@
 								<div class="col-md-5">
 									<select class="form-control" name="classiId">
 										<option value="0">都查看</option>
-										<%
-											List classilist = (List) request.getAttribute("clazzlist");
-											Iterator itee = classilist.iterator();
-											while (itee.hasNext()) {
-												Classi classi = (Classi) itee.next();
-												String line = "";
-												for (int i = 1; i <= classi.getLevel(); i++)
-													line += "&nbsp;&nbsp;";
-												String yes = "";
-												if ((Integer)request.getAttribute("classiId") == classi.getId())
-													yes = "selected";
-												out.println("<option value=\"" + classi.getId() + "\""+yes+">" + line
-														+ classi.getName() + "</option>");
-											}
-										%>
+										<c:forEach items="${clazzlist}" var="clazz" varStatus="status">
+											<option value="${clazz.id}">${clazz.name}</option>											
+										</c:forEach>
 									</select>
 								</div>
 								<div class="col-md-1">
@@ -138,35 +113,15 @@
 									</tr>
 								</thead>
 								<tbody>
-									<%
-										List<?> list = (List<?>) request
-												.getAttribute("schedulelist");
-										Iterator<?> it = list.iterator();
-										while (it.hasNext()) {
-											Schedule sche = (Schedule) it.next();
-											out.println("<tr>");
-											out.println("<td class=\"center\">"
-													+ sche.getStart_time().toString().substring(0, 16)
-													+ "</td>");
-											out.println("<td class=\"center\">"
-													+ sche.getEnd_time().toString().substring(0, 16)
-													+ "</td>");
-											List classlist = (List) request.getAttribute("clazzlist");
-											Iterator ite = classlist.iterator();
-											while (ite.hasNext()) {
-												Classi clas = (Classi) ite.next();
-												if (clas.getId() == sche.getClassiId()) {
-													out.println("<td class=\"center\">" + clas.getName()
-															+ "</td>");
-													break;
-												}
-											}
-											out.println("<td class=\"center\">" + sche.getTitle() + "</td>");
-											out.println("<td><a href=\"schedule/" + sche.getId() + "/detail.do\"><span class=\"label-default label label-danger delete\">详情</span></a></td>");
-
-											out.println("</tr>");
-										}
-									%>
+								<c:forEach items="${schedulelist}" var="scheVO" varStatus="status">
+									<tr>
+										<td class="center">${scheVO.start_time.toString().substring(0, 16)}</td>
+										<td class="center">${scheVO.end_time.toString().substring(0, 16)}</td>
+										<td class="center">${scheVO.classiname}</td>
+										<td class="center">${scheVO.title}</td>
+										<td class="center"><a href="schedule/${scheVO.id}/detail.do"><span class="label-default label label-danger delete">详情</span></a></td>
+									</tr>
+								</c:forEach>
 								</tbody>
 							</table>
 						</div>

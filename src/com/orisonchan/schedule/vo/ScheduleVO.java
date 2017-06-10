@@ -25,6 +25,11 @@ public class ScheduleVO {
 		return svo;
 	}
 	
+	public Schedule retranform(){
+		Schedule sche = new Schedule(this.id, this.start_time, this.end_time, this.title, this.content, this.userId, this.classiId);
+		return sche;
+	}
+	
 	public int getId() {
 		return id;
 	}

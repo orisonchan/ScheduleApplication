@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.orisonchan.schedule.bean.Schedule;
 import com.orisonchan.schedule.service.ClassiService;
 import com.orisonchan.schedule.service.ScheduleService;
 import com.orisonchan.schedule.service.UserService;
 import com.orisonchan.schedule.util.Message;
+import com.orisonchan.schedule.vo.ScheduleVO;
 
 /**
  * 包含路径：<br>
@@ -62,6 +62,8 @@ public class ScheduleController {
 	public String show(@RequestParam(value = "classiId", required = false) Integer classiId, HttpSession httpSession,
 			Model model, HttpServletRequest request) {
 		Integer userid = (Integer) httpSession.getAttribute("userid");
+		if (userid == null)
+			return "redirect:/forcelogout.do";
 		List list;
 		if (classiId == null || classiId == 0){
 			list = scheduleService.queryAllByuserId(userid);
@@ -73,8 +75,7 @@ public class ScheduleController {
 		}
 			
 		model.addAttribute("user", userService.getUserInfo(userid));
-		request.setAttribute("schedulelist", list);
-		request.setAttribute("clazzlist", classiService.queryAllByuserId(userid));
+		model.addAttribute("schedulelist", list);
 		return "schedule/view";
 	}
 
@@ -84,9 +85,11 @@ public class ScheduleController {
 	 * @return
 	 */
 	@RequestMapping("/new.do")
-	public String newadd(HttpSession httpSession, HttpServletRequest request) {
+	public String newadd(Model model,HttpSession httpSession, HttpServletRequest request) {
 		Integer userid = (Integer) httpSession.getAttribute("userid");
-		request.setAttribute("clazzlist", classiService.queryAllByuserId(userid));
+		if (userid == null)
+			return "redirect:/forcelogout.do";
+		model.addAttribute("clazzlist", classiService.queryAllByuserId(userid));
 		return "schedule/add";
 	}
 
@@ -128,9 +131,11 @@ public class ScheduleController {
 	@RequestMapping("/{id}/detail.do")
 	public String detail(@PathVariable("id") Integer id, Model model, HttpServletRequest request, HttpSession httpSession) {
 		Integer userid = (Integer) httpSession.getAttribute("userid");
-		request.setAttribute("clazzlist", classiService.queryAllByuserId(userid));
+		if (userid == null)
+			return "redirect:/forcelogout.do";
+		model.addAttribute("clazzlist", classiService.queryAllByuserId(userid));
 		model.addAttribute("user", userService.getUserInfo(id));
-		request.setAttribute("scheinfo", scheduleService.findById(id));
+		model.addAttribute("scheVO", scheduleService.findById(id));
 		return "schedule/detail";
 	}
 
@@ -147,18 +152,18 @@ public class ScheduleController {
 	 */
 	@RequestMapping("/{id}/update.do")
 	@ResponseBody
-	public Message update(@PathVariable("id") Integer id, @RequestParam("start_time") Timestamp start_time,
-			@RequestParam("end_time") Timestamp end_time, @RequestParam("title") String title,
+	public Message update(@PathVariable("id") Integer id, @RequestParam("start_time") String start_time,
+			@RequestParam("end_time") String end_time, @RequestParam("title") String title,
 			@RequestParam("content") String content, @RequestParam("classiId") Integer classiId) {
 		Message m = new Message();
-		Schedule s = scheduleService.findById(id);
-		s.setStart_time(start_time);
-		s.setEnd_time(end_time);
-		s.setTitle(title);
-		s.setContent(content);
-		s.setClassiId(classiId);
+		ScheduleVO svo = scheduleService.findById(id);
+		svo.setStart_time(Timestamp.valueOf(start_time));
+		svo.setEnd_time(Timestamp.valueOf(end_time));
+		svo.setTitle(title);
+		svo.setContent(content);
+		svo.setClassiId(classiId);
 		try {
-			scheduleService.updateschedule(s);
+			scheduleService.updateschedule(svo.retranform());
 			m.setMessage(Message.MESSAGE_SUCCESS);
 		} catch (Exception e) {
 			m.setMessage(Message.MESSAGE_ERROR);

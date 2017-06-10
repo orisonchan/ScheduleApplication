@@ -27,10 +27,10 @@ import com.orisonchan.schedule.util.Message;
  * /signup.do 注册，返回json格式message<br>
  * /update.do 修改个人信息，返回json格式message<br>
  * /showinfo.do 展示个人信息<br>
+ * /forcelogout.do 跳转退出<br>
  * 涉及session：<br>
  * com.servlet.codenumber 验证码<br>
  * userid 登录用户id<br>
- * 
  * 
  * 
  * @author Orison Chan
@@ -121,7 +121,7 @@ public class UserController {
 	public String showIndex(Model model, HttpSession httpSession, HttpServletRequest request) {
 		Integer userId = (Integer) httpSession.getAttribute("userid");
 		if (userId == null)
-			return "redirect:login.do";
+			return "redirect:forcelogout.do";
 		model.addAttribute("user", userService.getUserInfo(userId));
 		model.addAttribute("total_schedules_count", scheduleService.CountByUserId(userId));
 		model.addAttribute("today_schedules_count", scheduleService.TodayScheduleCount(userId));
@@ -188,6 +188,14 @@ public class UserController {
 			return "redirect:login.do";
 		model.addAttribute("user", userService.getUserInfo(userId));
 		return "user/user-info";
+	}
+	
+	/**
+	 * 跳转退出<br>
+	 */
+	@RequestMapping("/forcelogout.do")
+	public String forcelogout() {
+		return "user/forcelogout";
 	}
 
 }
