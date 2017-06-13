@@ -134,7 +134,7 @@
 									</div>
 									<br /> <label class="col-md-2 control-label">内容</label>
 									<div class="input-group col-md-4">
-										<textarea id="contents" name="content" class="form-control" size="16"></textarea>
+										<textarea id="contents" name="contents" class="form-control" size="16"></textarea>
 									</div>
 									<br /> <label class="col-md-2 control-label"></label>
 									<div class="input-group col-md-4">

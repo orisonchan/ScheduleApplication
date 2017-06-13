@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -75,8 +76,23 @@ public class ClassiController {
 	@RequestMapping("/show.do")
 	public String show(HttpSession httpSession, Model model, HttpServletRequest request) {
 		Integer userid = (Integer) httpSession.getAttribute("userid");
+		if (userid == null)
+			return "redirect:/forcelogout.do";
 		model.addAttribute("clazzlist", classiService.queryAllByuserId(userid));
 		model.addAttribute("user", userService.getUserInfo(userid));
 		return "classi/manage";
+	}
+	
+	@RequestMapping("/{id}/delete.do")
+	@ResponseBody
+	public Message deleteById(@PathVariable("id") Integer id) {
+		Message m = new Message();
+		try {
+			classiService.delete(id);
+			m.setMessage(Message.MESSAGE_SUCCESS);
+		} catch (Exception e) {
+			m.setMessage(Message.MESSAGE_ERROR);
+		}
+		return m;
 	}
 }

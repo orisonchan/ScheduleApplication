@@ -101,6 +101,7 @@
 									</div>
 									<div class="row">
 										<select class="form-control" id="parentId" name="parentId">
+											<option value="0">无父节点</option>
 										<c:forEach items="${clazzlist}" var="clazz" varStatus="status">
 											<option value="${clazz.id}" <c:if test="${clazz.id eq scheVO.classiId}"> selected</c:if> >
 											<c:forEach var="i" begin="1" end="${clazz.level}" >
@@ -140,7 +141,7 @@
 											</c:forEach>
 												${clazz.level+1}
 											</td>
-											<td><span class="label-default label label-danger">删除</span></td>
+											<td><button class="label-default label label-danger" style="border:0" onclick="del(${clazz.id})">删除</button></td>
 										</tr>
 										</c:forEach>
 									</tbody>
@@ -191,6 +192,24 @@
 				success : function(data, status) {
 					if (data["message"] == "success") {
 						alert("添加成功！");
+						window.location.href = "clazz/show.do";
+					} else {
+						showupdatebuttonpop("有点问题，再试试？");
+					}
+				},
+				error : function(XMLHttpRequest, textStatus, errorThrown) {
+					showupdatebuttonpop("有点问题，再试试？");
+				}
+			});
+		}
+		function del(id){
+			$.ajax({
+				url : 'clazz/'+id+'/delete.do',
+				method : "POST",
+				data : {},
+				success : function(data, status) {
+					if (data["message"] == "success") {
+						alert("删除成功！");
 						window.location.href = "clazz/show.do";
 					} else {
 						showupdatebuttonpop("有点问题，再试试？");

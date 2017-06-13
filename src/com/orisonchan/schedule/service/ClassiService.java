@@ -15,5 +15,7 @@ public interface ClassiService {
 	public int queryCreateWithinOneWeekClass(Integer id);
 	
 	public Classi queryById(int id);
+	
+	public void delete(int id);
 
 }

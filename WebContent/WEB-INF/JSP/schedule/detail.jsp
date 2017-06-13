@@ -86,14 +86,14 @@
 								<i class="glyphicon glyphicon-edit"></i> 日程详情
 							</h2>
 						</div>
-						<form method="post" action="schedule/${scheVO.id}/update.do">
+						<form>
 							<div class="box-content row">
 								<div class="form-group">
 									<label for="dtp_input1" class="col-md-2 control-label">时间选择</label>
 									<div class="input-group date form_datetime col-md-4"
 										data-date="" data-date-format="yyyy-mm-dd hh:ii:ss"
 										data-link-field="dtp_input1">
-										<input name="start_time" class="form-control" size="16"
+										<input id="start_time" name="start_time" class="form-control" size="16"
 											type="datetime"
 											value="${scheVO.start_time.toString().substring(0, 19)}"
 											readonly> <span class="input-group-addon"><span
@@ -108,7 +108,7 @@
 									<div class="input-group date form_datetime col-md-4"
 										data-date="" data-date-format="yyyy-mm-dd hh:ii:ss"
 										data-link-field="dtp_input2">
-										<input name="end_time" class="form-control" size="16"
+										<input id="end_time" name="end_time" class="form-control" size="16"
 											type="text"
 											value="${scheVO.end_time.toString().substring(0, 19)}"
 											readonly> <span class="input-group-addon"><span
@@ -117,7 +117,7 @@
 									<input type="hidden" id="dtp_input2" value="" /><br /> <label
 										class="col-md-2 control-label">分类</label>
 									<div class="input-group col-md-4">
-										<select class="form-control" name="classiId">
+										<select class="form-control" id="classiId" name="classiId">
 										<c:forEach items="${clazzlist}" var="clazz" varStatus="status">
 											<option value="${clazz.id}" <c:if test="${clazz.id eq scheVO.classiId}"> selected</c:if> >
 											<c:forEach var="i" begin="1" end="${clazz.level}" >
@@ -130,20 +130,20 @@
 									<br /> <label class="col-md-2 control-label">标题</label>
 
 									<div class="input-group col-md-4">
-										<input name="title" class="form-control" size="16" type="text"
+										<input id="title" name="title" class="form-control" size="16" type="text"
 											value="${scheVO.title}">
 									</div>
 									<br /> <label class="col-md-2 control-label">内容</label>
 									<div class="input-group col-md-4">
-										<textarea name="content" class="form-control" size="16">${scheVO.content}</textarea>
+										<textarea id="contents" name="contents" class="form-control" size="16">${scheVO.content}</textarea>
 									</div>
 									<br /> <label class="col-md-2 control-label"></label>
 									<div class="input-group col-md-4">
-										<input type="submit" class="btn btn-primary"
-											style="background-color:#6D7B95;border-color:#6D7B95"
-											value="修改" />
+										<button	type="button" class="btn btn-primary"
+											style="background-color:#6D7B95;border-color:#6D7B95" onclick="update(${scheVO.id})"
+											>修改</button>
 										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button
-												type="button" class="btn btn-danger" onclick="add(${scheVO.id})">删除</button>
+												type="button" class="btn btn-danger" onclick="del(${scheVO.id})">删除</button>
 									</div>
 								</div>
 							</div>
@@ -180,7 +180,31 @@
 		</div>
 	</div>
 	<script>
-		function add(id){
+		function update(id){
+			$.ajax({
+				url : 'schedule/'+id+'/update.do',
+				method : "POST",
+				data : {
+					'start_time' : $('#start_time').val(),
+					'end_time' : $('#end_time').val(),
+					'classiId' : $('#classiId').val(),
+					'title' : $('#title').val(),
+					'content' : $('#contents').val()
+				},
+				success : function(data, status) {
+					if (data["message"] == "success") {
+						alert("修改成功！");
+						window.location.reload();
+					} else {
+						showupdatebuttonpop("有点问题，再试试？");
+					}
+				},
+				error : function(XMLHttpRequest, textStatus, errorThrown) {
+					showupdatebuttonpop("有点问题，再试试？");
+				}
+			});
+		}
+		function del(id){
 			$.ajax({
 				url : 'schedule/'+id+'/delete.do',
 				method : "POST",

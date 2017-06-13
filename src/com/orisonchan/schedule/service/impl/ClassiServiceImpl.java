@@ -74,4 +74,10 @@ public class ClassiServiceImpl implements ClassiService {
 	public Classi queryById(int id){
 		return classiDAO.findById(id);
 	}
+	
+	@Override
+	public void delete(int id){
+		Classi clazz = classiDAO.findById(id);
+		classiDAO.delete(clazz);
+	}
 }
