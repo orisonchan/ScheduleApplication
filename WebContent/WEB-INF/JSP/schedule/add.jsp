@@ -134,7 +134,7 @@
 									</div>
 									<br /> <label class="col-md-2 control-label">内容</label>
 									<div class="input-group col-md-4">
-										<textarea id="content" name="content" class="form-control" size="16"></textarea>
+										<textarea id="contents" name="content" class="form-control" size="16"></textarea>
 									</div>
 									<br /> <label class="col-md-2 control-label"></label>
 									<div class="input-group col-md-4">
@@ -188,7 +188,7 @@
 					'end_time' : $('#end_time').val(),
 					'classiId' : $('#classiId').val(),
 					'title' : $('#title').val(),
-					'content' : $('#content').val()
+					'content' : $('#contents').val()
 				},
 				success : function(data, status) {
 					if (data["message"] == "success") {

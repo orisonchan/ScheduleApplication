@@ -75,7 +75,7 @@ public class ClassiController {
 	@RequestMapping("/show.do")
 	public String show(HttpSession httpSession, Model model, HttpServletRequest request) {
 		Integer userid = (Integer) httpSession.getAttribute("userid");
-		request.setAttribute("total_classes", classiService.queryAllByuserId(userid));
+		model.addAttribute("clazzlist", classiService.queryAllByuserId(userid));
 		model.addAttribute("user", userService.getUserInfo(userid));
 		return "classi/manage";
 	}

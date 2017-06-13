@@ -119,7 +119,11 @@
 									<div class="input-group col-md-4">
 										<select class="form-control" name="classiId">
 										<c:forEach items="${clazzlist}" var="clazz" varStatus="status">
-											<option value="${clazz.id}" <c:if test="${clazz.id eq scheVO.classiId}"> selected</c:if> >${clazz.name}</option>											
+											<option value="${clazz.id}" <c:if test="${clazz.id eq scheVO.classiId}"> selected</c:if> >
+											<c:forEach var="i" begin="1" end="${clazz.level}" >
+												&nbsp;
+											</c:forEach>
+											${clazz.name}</option>											
 										</c:forEach>
 										</select>
 									</div>
@@ -138,9 +142,8 @@
 										<input type="submit" class="btn btn-primary"
 											style="background-color:#6D7B95;border-color:#6D7B95"
 											value="修改" />
-										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a
-											href="schedule/delete?id=${scheVO.id}"><button
-												type="button" class="btn btn-danger">删除</button></a>
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button
+												type="button" class="btn btn-danger" onclick="add(${scheVO.id})">删除</button>
 									</div>
 								</div>
 							</div>
@@ -176,6 +179,26 @@
 			</div>
 		</div>
 	</div>
+	<script>
+		function add(id){
+			$.ajax({
+				url : 'schedule/'+id+'/delete.do',
+				method : "POST",
+				data : {},
+				success : function(data, status) {
+					if (data["message"] == "success") {
+						alert("删除成功！");
+						window.location.href = "schedule/show.do";
+					} else {
+						showupdatebuttonpop("有点问题，再试试？");
+					}
+				},
+				error : function(XMLHttpRequest, textStatus, errorThrown) {
+					showupdatebuttonpop("有点问题，再试试？");
+				}
+			});
+		}
+	</script>
 	<script src="bower_components/moment/min/moment.min.js"></script>
 	<script src="bower_components/fullcalendar/dist/fullcalendar.js"></script>
 	<script src="bower_components/responsive-tables/responsive-tables.js"></script>

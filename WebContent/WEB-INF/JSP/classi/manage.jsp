@@ -1,12 +1,10 @@
-<%@ page language="java" import="java.util.*,com.bean.*"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	HttpSession s = request.getSession();
-	Integer userid = (Integer) s.getAttribute("userid");
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -27,17 +25,6 @@
 <script src="bower_components/jquery/jquery.min.js"></script>
 </head>
 <body>
-	<%
-		//如果未登录，跳转回login
-		if (userid == null) {
-	%>
-	<script>
-		alert("您还未登录！");
-		window.location.href = "login.do";
-	</script>
-	<%
-		}
-	%>
 	<nav class="navbar navbar-default" role="navigation"
 		style="background: url(./img/bg.jpg) 0 0/cover no-repeat;padding-top:0px">
 	<div class="navbar-inner">
@@ -114,19 +101,13 @@
 									</div>
 									<div class="row">
 										<select class="form-control" id="parentId" name="parentId">
-											<option value="-1">无父节点</option>
-											<%
-												List classilist = (List) request.getAttribute("total_classes");
-												Iterator it = classilist.iterator();
-												while (it.hasNext()) {
-													Classi classi = (Classi) it.next();
-													String line = "";
-													for (int i = 1; i <= classi.getLevel(); i++)
-														line += "&nbsp;&nbsp;";
-													out.println("<option value=\"" + classi.getId() + "\">" + line
-															+ classi.getName() + "</option>");
-												}
-											%>
+										<c:forEach items="${clazzlist}" var="clazz" varStatus="status">
+											<option value="${clazz.id}" <c:if test="${clazz.id eq scheVO.classiId}"> selected</c:if> >
+											<c:forEach var="i" begin="1" end="${clazz.level}" >
+												&nbsp;
+											</c:forEach>
+											${clazz.name}</option>											
+										</c:forEach>
 										</select>
 									</div>
 									<br />
@@ -145,22 +126,23 @@
 										</tr>
 									</thead>
 									<tbody>
-										<%
-											it = classilist.iterator();
-											while (it.hasNext()) {
-												Classi classi = (Classi) it.next();
-												String line = "";
-												for (int i = 1; i <= classi.getLevel(); i++)
-													line += "--";
-												out.println("<tr>");
-												out.println("<td class=\"center\">" + line + classi.getName()
-														+ "</td>");
-												out.println("<td class=\"center\">" + line + (classi.getLevel()+1)
-														+ "</td>");
-												out.println("<td><span class=\"label-default label label-danger\">删除</span></td>");
-												out.println("</tr>");
-											}
-										%>
+										<c:forEach items="${clazzlist}" var="clazz" varStatus="status">
+										<tr>
+											<td class="center">
+											<c:forEach var="i" begin="1" end="${clazz.level}" >
+												&nbsp;
+											</c:forEach>
+												${clazz.name}
+											</td>
+											<td class="center">
+											<c:forEach var="i" begin="1" end="${clazz.level}" >
+												&nbsp;
+											</c:forEach>
+												${clazz.level+1}
+											</td>
+											<td><span class="label-default label label-danger">删除</span></td>
+										</tr>
+										</c:forEach>
 									</tbody>
 								</table>
 							</div>
